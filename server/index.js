@@ -1,3 +1,4 @@
+const dotenv = require("dotenv").config();
 const express = require("express");
 const mongoose = require("mongoose");
 const bodyParser = require("body-parser");
@@ -13,7 +14,7 @@ app.use(morgan("tiny"));
 app.use(bodyParser.json());
 
 mongoose.connect(
-  "mongodb+srv://admin:KedYLGpRA8hWQ4iW@cluster0-m2kce.mongodb.net/posts?retryWrites=true&w=majority",
+  `mongodb+srv://${process.env.DB_USER}:${process.env.DB_PASS}@cluster0-m2kce.mongodb.net/${process.env.DB_COLLECTION}?retryWrites=true&w=majority`,
   { useNewUrlParser: true, useUnifiedTopology: true, useFindAndModify: false }
 );
 
@@ -38,5 +39,6 @@ app.use((error, req, res, next) => {
 
 db.on("error", console.error.bind(console, "connection error:"));
 db.once("open", function () {
+  console.log("Database connection success");
   app.listen(8081);
 });

@@ -42,6 +42,11 @@ export default {
       axios
         .delete(`http://localhost:8081/posts/${this.$route.params.id}`)
         .then(() => {
+          this.$buefy.toast.open({
+            message: "Post was deleted",
+            position: "is-bottom",
+            type: "is-success",
+          });
           this.$router.push("/");
         })
         .catch(() => {

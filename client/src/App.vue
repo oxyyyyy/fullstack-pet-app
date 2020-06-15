@@ -18,21 +18,60 @@
       <template slot="end">
         <b-navbar-item tag="div">
           <div class="buttons">
-            <a class="button is-primary">
+            <button
+              class="button is-primary"
+              @click="isSignUpModalActive = true"
+            >
               <strong>Sign up</strong>
-            </a>
-            <a class="button is-light">
+            </button>
+            <button class="button is-light" @click="isSignInModalActive = true">
               Log in
-            </a>
+            </button>
           </div>
         </b-navbar-item>
       </template>
     </b-navbar>
+    <b-modal
+      :active.sync="isSignUpModalActive"
+      has-modal-card
+      trap-focus
+      :destroy-on-hide="false"
+      aria-role="dialog"
+      aria-modal
+    >
+      <SignUpForm></SignUpForm>
+    </b-modal>
+    <b-modal
+      :active.sync="isSignInModalActive"
+      has-modal-card
+      trap-focus
+      :destroy-on-hide="false"
+      aria-role="dialog"
+      aria-modal
+    >
+      <SignInForm></SignInForm>
+    </b-modal>
     <router-view class="view container" />
   </div>
 </template>
 
-<script></script>
+<script>
+import SignUpForm from "@/components/SignUpForm";
+import SignInForm from "@/components/SignInForm";
+
+export default {
+  components: {
+    SignUpForm,
+    SignInForm,
+  },
+  data() {
+    return {
+      isSignUpModalActive: false,
+      isSignInModalActive: false,
+    };
+  },
+};
+</script>
 
 <style lang="scss">
 .view {

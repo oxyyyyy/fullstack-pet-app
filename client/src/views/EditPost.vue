@@ -41,6 +41,11 @@ export default {
             content: this.form.content,
           })
           .then(() => {
+            this.$buefy.toast.open({
+              message: "Post was edited",
+              position: "is-bottom",
+              type: "is-success",
+            });
             this.$router.push("/");
           })
           .catch(() => {

@@ -5,6 +5,7 @@ const bodyParser = require("body-parser");
 const morgan = require("morgan");
 
 const postsRouter = require("./router/posts");
+const authRouter = require("./router/auth");
 
 const app = express();
 
@@ -29,12 +30,14 @@ app.use((req, res, next) => {
 });
 
 app.use("/posts", postsRouter);
+app.use("/auth", authRouter);
 
 app.use((error, req, res, next) => {
   console.error(error);
   const status = error.statusCode || 500;
   const message = error.message;
-  res.status(status).json({ message: message });
+  const data = error.data;
+  res.status(status).json({ message, data });
 });
 
 db.on("error", console.error.bind(console, "connection error:"));

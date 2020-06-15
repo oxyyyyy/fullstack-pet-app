@@ -35,7 +35,7 @@ export default {
   },
   methods: {
     submitForm() {
-      if (this.form) {
+      if (this.form.title && this.form.content) {
         this.isLoading = true;
         axios
           .post("http://localhost:8081/posts", {
@@ -43,6 +43,11 @@ export default {
             content: this.form.content,
           })
           .then(() => {
+            this.$buefy.toast.open({
+              message: "Post was created",
+              position: "is-bottom",
+              type: "is-success",
+            });
             this.$router.push("/");
           })
           .catch((error) => {

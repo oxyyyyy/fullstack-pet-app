@@ -9,7 +9,7 @@
           type="is-link"
           class="create-post__btn"
         >
-          Create Post
+          <strong>Create Post</strong>
         </b-button>
       </header>
       <PostCard

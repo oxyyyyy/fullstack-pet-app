@@ -9,6 +9,7 @@
           <b-input
             type="email"
             v-model="signUpForm.email"
+            autocomplete="email"
             placeholder="Your email"
             required
           >
@@ -18,6 +19,7 @@
           <b-input
             type="text"
             v-model="signUpForm.name"
+            autocomplete="nickname"
             placeholder="Your name"
             required
           >
@@ -28,6 +30,7 @@
             type="password"
             v-model="signUpForm.password"
             password-reveal
+            autocomplete="new-password"
             placeholder="Your password"
             required
             minlength="6"
@@ -70,12 +73,13 @@ export default {
       ) {
         this.isLoading = true;
         axios
-          .post("http://localhost:8081/auth", {
+          .post("/auth/signup", {
             email: this.signUpForm.email,
             password: this.signUpForm.password,
             name: this.signUpForm.name,
           })
           .then(() => {
+            this.$parent.close();
             this.$buefy.toast.open({
               message: "Sign Up success",
               position: "is-bottom",
@@ -103,6 +107,7 @@ export default {
               position: "is-bottom",
               type: "is-danger",
             });
+            console.error(new Error(error));
           })
           .finally(() => {
             this.isLoading = false;

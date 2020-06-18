@@ -40,7 +40,7 @@ export default {
     deleteCurrentPost() {
       this.isLoading = true;
       axios
-        .delete(`http://localhost:8081/posts/${this.$route.params.id}`)
+        .delete(`/posts/${this.$route.params.id}`)
         .then(() => {
           this.$buefy.toast.open({
             message: "Post was deleted",
@@ -64,7 +64,7 @@ export default {
   mounted() {
     this.isLoading = true;
     axios
-      .get(`http://localhost:8081/posts/${this.$route.params.id}`)
+      .get(`/posts/${this.$route.params.id}`)
       .then((response) => {
         this.post = response.data;
         this.post.timestamp = new Date(this.post.createdAt);

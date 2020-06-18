@@ -2,6 +2,9 @@ import Vue from "vue";
 import App from "./App.vue";
 import router from "./router";
 import store from "./store";
+
+import "./service/axios";
+
 import Buefy from "buefy";
 
 import "normalize.css";

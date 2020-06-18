@@ -36,7 +36,7 @@ export default {
       if (this.form.title && this.form.content) {
         this.isLoading = true;
         axios
-          .put(`http://localhost:8081/posts/${this.$route.params.id}`, {
+          .put(`/posts/${this.$route.params.id}`, {
             title: this.form.title,
             content: this.form.content,
           })
@@ -64,7 +64,7 @@ export default {
   mounted() {
     this.isLoading = true;
     axios
-      .get(`http://localhost:8081/posts/${this.$route.params.id}`)
+      .get(`/posts/${this.$route.params.id}`)
       .then((response) => {
         this.form = response.data;
       })

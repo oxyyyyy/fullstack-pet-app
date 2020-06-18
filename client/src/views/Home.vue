@@ -52,7 +52,7 @@ export default {
   },
   mounted() {
     axios
-      .get("http://localhost:8081/posts")
+      .get("/posts")
       .then((response) => {
         this.posts = response.data;
         if (this.posts.length === 0) {

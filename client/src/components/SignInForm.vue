@@ -38,7 +38,7 @@
 </template>
 
 <script>
-// import axios from "axios";
+import axios from "axios";
 
 export default {
   name: "SignInForm",
@@ -52,9 +52,50 @@ export default {
     };
   },
   methods: {
-    signUp() {
-      if (this.signUpForm.email && this.signUpForm.password) {
-        console.log();
+    signIn() {
+      if (this.signInForm.email && this.signInForm.password) {
+        this.isLoading = true;
+        axios
+          .post("/auth/signin", {
+            email: this.signInForm.email,
+            password: this.signInForm.password,
+          })
+          .then((response) => {
+            this.$buefy.toast.open({
+              message: "Sign In success",
+              position: "is-bottom",
+              type: "is-success",
+            });
+            for (let field in this.signInForm) {
+              this.signInForm[field] = "";
+            }
+            if (response.status === 200) {
+              localStorage.setItem("jwt_token", response.data.token);
+              this.$store.dispatch("switchIsSignedIn");
+              this.$parent.close();
+            }
+          })
+          .catch((error) => {
+            if (error.response) {
+              if (error.response.status === 401) {
+                this.$buefy.toast.open({
+                  message: "Wrong credentials",
+                  position: "is-bottom",
+                  type: "is-danger",
+                });
+                return;
+              }
+            }
+            this.$buefy.toast.open({
+              message: `Something went wrong`,
+              position: "is-bottom",
+              type: "is-danger",
+            });
+            console.error(new Error(error));
+          })
+          .finally(() => {
+            this.isLoading = false;
+          });
       } else {
         this.$buefy.toast.open({
           duration: 5000,

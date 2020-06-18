@@ -5,24 +5,27 @@ const User = require("../models/user");
 
 const authController = require("../controllers/auth");
 
-// POST /auth
+// * POST /auth/signup
 router.post(
-  "/",
+  "/signup",
   [
     check("email")
       .isEmail()
+      .normalizeEmail()
       .custom((value) => {
         return User.findOne({ email: value }).then((user) => {
           if (user) {
             return Promise.reject("E-mail already in use");
           }
         });
-      })
-      .normalizeEmail(),
+      }),
     check("password").trim().isLength({ min: 6 }),
     check("name").trim().notEmpty(),
   ],
   authController.signup
 );
+
+// * POST /auth/signin
+router.post("/signin", authController.signin);
 
 module.exports = router;

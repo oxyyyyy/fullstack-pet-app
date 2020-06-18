@@ -1,29 +1,31 @@
 const router = require("express").Router();
 const { check } = require("express-validator");
 
+const authMiddleware = require("./../middleware/auth");
+
 const postsController = require("../controllers/posts");
 
-// GET /posts
+// * GET /posts
 router.get("/", postsController.getAllPosts);
 
-// POST /posts
+// * POST /posts
 router.post(
   "/",
   [check("title").isLength({ min: 1 }), check("content").isLength({ min: 10 })],
   postsController.createPost
 );
 
-// GET /posts/:id
+// * GET /posts/:id
 router.get("/:postID", postsController.getPost);
 
-// PUT /posts/:id
+// * PUT /posts/:id
 router.put(
   "/:postID",
   [check("title").isLength({ min: 1 }), check("content").isLength({ min: 10 })],
   postsController.editPost
 );
 
-// DELETE /posts/:id
+// * DELETE /posts/:id
 router.delete("/:postID", postsController.deletePost);
 
 module.exports = router;

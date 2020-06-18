@@ -61,15 +61,15 @@ export default {
             password: this.signInForm.password,
           })
           .then((response) => {
-            this.$buefy.toast.open({
-              message: "Sign In success",
-              position: "is-bottom",
-              type: "is-success",
-            });
-            for (let field in this.signInForm) {
-              this.signInForm[field] = "";
-            }
             if (response.status === 200) {
+              this.$buefy.toast.open({
+                message: "Sign In success",
+                position: "is-bottom",
+                type: "is-success",
+              });
+              for (let field in this.signInForm) {
+                this.signInForm[field] = "";
+              }
               localStorage.setItem("jwt_token", response.data.token);
               this.$store.dispatch("switchIsSignedIn");
               this.$parent.close();

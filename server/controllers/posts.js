@@ -1,9 +1,11 @@
 const Post = require("../models/post");
+
 const { validationResult } = require("express-validator");
 
 exports.getAllPosts = (req, res, next) => {
   Post.find()
     .sort({ updatedAt: "desc" })
+    .populate("author", "name")
     .then((posts) => {
       res.json(posts);
     })
@@ -15,6 +17,7 @@ exports.getAllPosts = (req, res, next) => {
 exports.getPost = (req, res, next) => {
   const id = req.params.postID;
   Post.findById(id)
+    .populate("author", "name")
     .then((post) => {
       if (!post) {
         const error = new Error("Could not find post.");
@@ -34,6 +37,7 @@ exports.createPost = (req, res, next) => {
   const post = new Post({
     title,
     content,
+    author: req.userID,
   });
 
   const errors = validationResult(req);

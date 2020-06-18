@@ -3,7 +3,11 @@
     <article class="post">
       <h2 class="postCard__title title">{{ post.title }}</h2>
       <p class="postCard__content">{{ post.content }}</p>
-      <p class="postCard__timestamp is-size-5">
+      <p class="postCard__author">
+        <span class="has-text-weight-semibold">Author:</span>
+        {{ post.author.name }}
+      </p>
+      <p class="postCard__timestamp">
         <span class="has-text-weight-semibold">Created:</span>
         {{ post.timestamp }}
       </p>
@@ -14,10 +18,15 @@
         type="is-info"
         class="post-controls__edit-btn"
         :to="'/edit-post/' + $route.params.id"
+        v-if="$store.state.isSignedIn"
       >
         Edit
       </b-button>
-      <b-button type="is-danger" @click="deleteCurrentPost">
+      <b-button
+        type="is-danger"
+        @click="deleteCurrentPost"
+        v-if="$store.state.isSignedIn"
+      >
         Delete
       </b-button>
     </div>
@@ -32,7 +41,9 @@ export default {
   name: "SinglePost",
   data() {
     return {
-      post: {},
+      post: {
+        author: "",
+      },
       isLoading: false,
     };
   },
@@ -88,6 +99,10 @@ export default {
 .post-controls {
   display: flex;
   padding-top: 2rem;
+}
+
+.postCard__author {
+  margin-top: 3rem;
 }
 
 .post-controls__edit-btn {

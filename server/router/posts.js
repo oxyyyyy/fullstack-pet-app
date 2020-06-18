@@ -11,6 +11,7 @@ router.get("/", postsController.getAllPosts);
 // * POST /posts
 router.post(
   "/",
+  authMiddleware,
   [check("title").isLength({ min: 1 }), check("content").isLength({ min: 10 })],
   postsController.createPost
 );
@@ -21,11 +22,12 @@ router.get("/:postID", postsController.getPost);
 // * PUT /posts/:id
 router.put(
   "/:postID",
+  authMiddleware,
   [check("title").isLength({ min: 1 }), check("content").isLength({ min: 10 })],
   postsController.editPost
 );
 
 // * DELETE /posts/:id
-router.delete("/:postID", postsController.deletePost);
+router.delete("/:postID", authMiddleware, postsController.deletePost);
 
 module.exports = router;

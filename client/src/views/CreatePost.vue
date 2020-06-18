@@ -36,12 +36,17 @@ export default {
   methods: {
     submitForm() {
       if (this.form.title && this.form.content) {
+        const jwtToken = "Bearer " + localStorage.getItem("jwt_token");
         this.isLoading = true;
         axios
-          .post("/posts", {
-            title: this.form.title,
-            content: this.form.content,
-          })
+          .post(
+            "/posts",
+            {
+              title: this.form.title,
+              content: this.form.content,
+            },
+            { headers: { Authorization: jwtToken } }
+          )
           .then(() => {
             this.$buefy.toast.open({
               message: "Post was created",

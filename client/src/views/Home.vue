@@ -4,6 +4,7 @@
       <header class="posts__header">
         <h1 class="title">Posts:</h1>
         <b-button
+          v-if="$store.state.isSignedIn"
           tag="router-link"
           to="/create-post"
           type="is-link"
@@ -18,6 +19,7 @@
         :id="item._id"
         :title="item.title"
         :content="item.content"
+        :author="item.author.name"
         :timestamp="new Date(item.createdAt)"
       />
       <p v-if="isNoPosts">No posts :(</p>
@@ -59,12 +61,13 @@ export default {
           this.isNoPosts = true;
         }
       })
-      .catch(() => {
+      .catch((err) => {
         this.$buefy.toast.open({
           message: `Something went wrong`,
           position: "is-bottom",
           type: "is-danger",
         });
+        console.error(err);
       })
       .finally(() => {
         this.preloaderIsActive = false;

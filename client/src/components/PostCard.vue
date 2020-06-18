@@ -2,7 +2,10 @@
   <router-link :to="'/posts/' + id" class="postCard box">
     <h2 class="postCard__title title">{{ title }}</h2>
     <p class="postCard__content">{{ content | truncate }}</p>
-    <p class="postCard__timestamp is-size-5">
+    <p class="postCard__author">
+      <span class="has-text-weight-semibold">Author:</span> {{ author }}
+    </p>
+    <p class="postCard__timestamp">
       <span class="has-text-weight-semibold">Created:</span>
       {{ timestamp.getDate() }}/{{ timestamp.getMonth() }}/{{
         timestamp.getFullYear()
@@ -28,6 +31,10 @@ export default {
       type: String,
       required: true,
     },
+    author: {
+      type: String,
+      required: true,
+    },
     timestamp: {
       type: Date,
       required: true,
@@ -43,7 +50,7 @@ export default {
 </script>
 
 <style lang="scss">
-.postCard__timestamp {
+.postCard__author {
   margin-top: 1.5rem;
 }
 

@@ -14,7 +14,8 @@ module.exports = (req, res, next) => {
   try {
     decodedJwtToken = jwt.verify(jwtToken, process.env.JWT_SECRET);
   } catch (error) {
-    error.statusCode = 500;
+    error.statusCode = 401;
+    res.status(401).json("Token has expired");
     throw error;
   }
 

@@ -76,6 +76,7 @@ export default {
                 token: response.data.token,
                 userID: response.data.id,
                 jwtToken: response.data.token,
+                username: response.data.username,
               });
               this.$parent.close();
             }

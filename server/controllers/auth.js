@@ -72,7 +72,11 @@ exports.signin = (req, res, next) => {
       //   today.getHours() + parseInt(jwtExpiresIn)
       // );
 
-      res.json({ token, id: userGlobal._id.toString() });
+      res.json({
+        token,
+        id: userGlobal._id.toString(),
+        username: userGlobal.name,
+      });
     })
     .catch((err) => {
       next(err);

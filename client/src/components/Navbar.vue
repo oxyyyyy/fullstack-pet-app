@@ -17,6 +17,7 @@
 
       <template slot="end">
         <b-navbar-item tag="div">
+          <p class="navbar__nickname">{{ $store.state.username }}</p>
           <div class="buttons">
             <button
               class="button is-primary"
@@ -92,4 +93,8 @@ export default {
 };
 </script>
 
-<style lang="scss"></style>
+<style lang="scss">
+.navbar__nickname {
+  margin-right: 1rem;
+}
+</style>

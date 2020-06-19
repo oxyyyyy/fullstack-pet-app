@@ -18,14 +18,14 @@
         type="is-info"
         class="post-controls__edit-btn"
         :to="'/edit-post/' + $route.params.id"
-        v-if="$store.state.isSignedIn"
+        v-if="$store.state.isSignedIn && isAuthor"
       >
         Edit
       </b-button>
       <b-button
         type="is-danger"
         @click="deleteCurrentPost"
-        v-if="$store.state.isSignedIn"
+        v-if="$store.state.isSignedIn && isAuthor"
       >
         Delete
       </b-button>
@@ -44,6 +44,7 @@ export default {
       post: {
         author: "",
       },
+      isAuthor: false,
       isLoading: false,
     };
   },
@@ -51,7 +52,9 @@ export default {
     deleteCurrentPost() {
       this.isLoading = true;
       axios
-        .delete(`/posts/${this.$route.params.id}`)
+        .delete(`/posts/${this.$route.params.id}`, {
+          headers: { Authorization: this.$store.state.jwtToken },
+        })
         .then(() => {
           this.$buefy.toast.open({
             message: "Post was deleted",
@@ -80,6 +83,8 @@ export default {
         this.post = response.data;
         this.post.timestamp = new Date(this.post.createdAt);
         this.post.timestamp = `${this.post.timestamp.getDate()}/${this.post.timestamp.getMonth()}/${this.post.timestamp.getFullYear()} at ${this.post.timestamp.getHours()}:${this.post.timestamp.getMinutes()}`;
+        this.isAuthor =
+          response.data.author._id === this.$store.state.userID ? true : false;
       })
       .catch(() => {
         this.$buefy.toast.open({

@@ -11,7 +11,6 @@ router.post(
   [
     check("email")
       .isEmail()
-      .normalizeEmail()
       .custom((value) => {
         return User.findOne({ email: value }).then((user) => {
           if (user) {

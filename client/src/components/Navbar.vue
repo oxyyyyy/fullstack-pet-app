@@ -63,6 +63,7 @@
     >
       <SignInForm></SignInForm>
     </b-modal>
+    <b-loading :active.sync="isLoading"></b-loading>
   </div>
 </template>
 
@@ -79,12 +80,13 @@ export default {
     return {
       isSignUpModalActive: false,
       isSignInModalActive: false,
+      isLoading: false,
     };
   },
   methods: {
     signOut() {
-      localStorage.removeItem("jwt_token");
-      this.$store.dispatch("switchIsSignedIn");
+      this.isLoading = true;
+      this.$store.dispatch("signOut");
     },
   },
 };

@@ -10,6 +10,7 @@
             type="email"
             v-model="signInForm.email"
             placeholder="Your email"
+            autocomplete="email"
             required
           >
           </b-input>
@@ -20,6 +21,7 @@
             v-model="signInForm.password"
             password-reveal
             placeholder="Your password"
+            autocomplete="password"
             required
             minlength="6"
           >
@@ -70,8 +72,11 @@ export default {
               for (let field in this.signInForm) {
                 this.signInForm[field] = "";
               }
-              localStorage.setItem("jwt_token", response.data.token);
-              this.$store.dispatch("switchIsSignedIn");
+              this.$store.dispatch("signIn", {
+                token: response.data.token,
+                userID: response.data.id,
+                jwtToken: response.data.token,
+              });
               this.$parent.close();
             }
           })

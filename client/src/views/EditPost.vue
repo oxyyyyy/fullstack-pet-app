@@ -36,10 +36,14 @@ export default {
       if (this.form.title && this.form.content) {
         this.isLoading = true;
         axios
-          .put(`/posts/${this.$route.params.id}`, {
-            title: this.form.title,
-            content: this.form.content,
-          })
+          .put(
+            `/posts/${this.$route.params.id}`,
+            {
+              title: this.form.title,
+              content: this.form.content,
+            },
+            { headers: { Authorization: this.$store.state.jwtToken } }
+          )
           .then(() => {
             this.$buefy.toast.open({
               message: "Post was edited",

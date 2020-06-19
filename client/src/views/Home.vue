@@ -22,7 +22,7 @@
         :author="item.author.name"
         :timestamp="new Date(item.createdAt)"
       />
-      <p v-if="isNoPosts">No posts :(</p>
+      <p v-if="posts.length === 0">No posts :(</p>
       <div class="preloader" v-show="preloaderIsActive">
         <b-skeleton width="20%" :animated="true"></b-skeleton>
         <b-skeleton :animated="true" :active="preloaderIsActive"></b-skeleton>
@@ -46,7 +46,6 @@ export default {
     return {
       posts: [],
       preloaderIsActive: true,
-      isNoPosts: false,
     };
   },
   components: {
@@ -57,9 +56,6 @@ export default {
       .get("/posts")
       .then((response) => {
         this.posts = response.data;
-        if (this.posts.length === 0) {
-          this.isNoPosts = true;
-        }
       })
       .catch((err) => {
         this.$buefy.toast.open({

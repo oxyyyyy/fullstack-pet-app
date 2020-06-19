@@ -36,7 +36,6 @@ export default {
   methods: {
     submitForm() {
       if (this.form.title && this.form.content) {
-        const jwtToken = "Bearer " + localStorage.getItem("jwt_token");
         this.isLoading = true;
         axios
           .post(
@@ -45,7 +44,7 @@ export default {
               title: this.form.title,
               content: this.form.content,
             },
-            { headers: { Authorization: jwtToken } }
+            { headers: { Authorization: this.$store.state.jwtToken } }
           )
           .then(() => {
             this.$buefy.toast.open({

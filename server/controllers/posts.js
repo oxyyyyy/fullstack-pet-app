@@ -2,36 +2,37 @@ const Post = require("../models/post");
 
 const { validationResult } = require("express-validator");
 
-exports.getAllPosts = (req, res, next) => {
-  Post.find()
-    .sort({ updatedAt: "desc" })
-    .populate("author", "name")
-    .then((posts) => {
-      res.json(posts);
-    })
-    .catch((err) => {
-      next(err);
-    });
+exports.getAllPosts = async (req, res, next) => {
+  try {
+    const posts = await Post.find()
+      .sort({ updatedAt: "desc" })
+      .populate("author", "name");
+
+    res.json(posts);
+  } catch (err) {
+    next(err);
+  }
 };
 
-exports.getPost = (req, res, next) => {
+exports.getPost = async (req, res, next) => {
   const id = req.params.postID;
-  Post.findById(id)
-    .populate("author", "name")
-    .then((post) => {
-      if (!post) {
-        const error = new Error("Could not find post.");
-        error.statusCode = 404;
-        throw error;
-      }
-      res.json(post);
-    })
-    .catch((err) => {
-      next(err);
-    });
+
+  try {
+    const post = await Post.findById(id).populate("author", "name");
+
+    if (!post) {
+      const error = new Error("Could not find post.");
+      error.statusCode = 404;
+      throw error;
+    }
+
+    res.json(post);
+  } catch (err) {
+    next(err);
+  }
 };
 
-exports.createPost = (req, res, next) => {
+exports.createPost = async (req, res, next) => {
   const title = req.body.title;
   const content = req.body.content;
   const post = new Post({
@@ -39,26 +40,24 @@ exports.createPost = (req, res, next) => {
     content,
     author: req.userID,
   });
-
   const errors = validationResult(req);
+
   if (!errors.isEmpty()) {
     return res.status(422).json({ errors: errors.array() });
   }
 
-  post
-    .save()
-    .then((post) => {
-      res.status(201).json({
-        message: "Post created successfully!",
-        post: post,
-      });
-    })
-    .catch((err) => {
-      next(err);
+  try {
+    const savedPost = await post.save();
+    res.status(201).json({
+      message: "Post created successfully!",
+      post: savedPost,
     });
+  } catch (err) {
+    next(err);
+  }
 };
 
-exports.editPost = (req, res, next) => {
+exports.editPost = async (req, res, next) => {
   const id = req.params.postID;
   const title = req.body.title;
   const content = req.body.content;
@@ -68,38 +67,39 @@ exports.editPost = (req, res, next) => {
     return res.status(422).json({ errors: errors.array() });
   }
 
-  Post.findByIdAndUpdate(id, { title, content })
-    .then((post) => {
-      if (!post) {
-        const error = new Error("Could not find post.");
-        error.statusCode = 404;
-        throw error;
-      }
-      res.status(200).json({
-        message: "Post updated successfully!",
-        post: post,
-      });
-    })
-    .catch((err) => {
-      next(err);
+  try {
+    const post = await Post.findByIdAndUpdate(id, { title, content });
+
+    if (!post) {
+      const error = new Error("Could not find post.");
+      error.statusCode = 404;
+      throw error;
+    }
+    res.status(200).json({
+      message: "Post updated successfully!",
+      post: post,
     });
+  } catch (err) {
+    next(err);
+  }
 };
 
-exports.deletePost = (req, res, next) => {
+exports.deletePost = async (req, res, next) => {
   const id = req.params.postID;
-  Post.findByIdAndDelete(id)
-    .then((post) => {
-      if (!post) {
-        const error = new Error("Could not find post.");
-        error.statusCode = 404;
-        throw error;
-      }
-      res.status(200).json({
-        message: "Post removed successfully!",
-        post: post,
-      });
-    })
-    .catch((err) => {
-      next(err);
+
+  try {
+    const post = await Post.findByIdAndDelete(id);
+
+    if (!post) {
+      const error = new Error("Could not find post.");
+      error.statusCode = 404;
+      throw error;
+    }
+    res.status(200).json({
+      message: "Post removed successfully!",
+      post: post,
     });
+  } catch (err) {
+    next(err);
+  }
 };

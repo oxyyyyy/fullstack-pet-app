@@ -1,4 +1,5 @@
 const Post = require("../models/post");
+const User = require("../models/user");
 
 const { validationResult } = require("express-validator");
 
@@ -48,6 +49,9 @@ exports.createPost = async (req, res, next) => {
 
   try {
     const savedPost = await post.save();
+    const user = await User.findById(req.userID);
+    user.posts.push(post);
+    user.save();
     res.status(201).json({
       message: "Post created successfully!",
       post: savedPost,

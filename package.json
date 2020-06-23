@@ -1,12 +1,16 @@
 {
-  "name": "server",
+  "name": "fullstack-pet-app",
   "version": "1.0.0",
-  "description": "",
+  "description": "Kind of blog",
   "main": "index.js",
   "scripts": {
     "start": "node index.js",
-    "start:dev": "nodemon index.js",
+    "dev": "nodemon index.js",
     "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/oxyyyyy/fullstack-pet-app.git"
   },
   "author": "",
   "license": "ISC",

@@ -14,29 +14,29 @@ const routes = [
   {
     path: "/",
     name: "Home",
-    component: Home,
+    component: Home
   },
   {
     path: "/posts/:id",
     name: "SinglePost",
-    component: SinglePost,
+    component: SinglePost
   },
   {
     path: "/create-post",
     name: "CreatePost",
-    component: CreatePost,
+    component: CreatePost
   },
   {
     path: "/edit-post/:id",
     name: "EditPost",
-    component: EditPost,
-  },
+    component: EditPost
+  }
 ];
 
 const router = new VueRouter({
   mode: "history",
   base: process.env.BASE_URL,
-  routes,
+  routes
 });
 
 router.beforeEach((to, from, next) => {

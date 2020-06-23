@@ -75,21 +75,21 @@ import SignInForm from "@/components/SignInForm";
 export default {
   components: {
     SignUpForm,
-    SignInForm,
+    SignInForm
   },
   data() {
     return {
       isSignUpModalActive: false,
       isSignInModalActive: false,
-      isLoading: false,
+      isLoading: false
     };
   },
   methods: {
     signOut() {
       this.isLoading = true;
       this.$store.dispatch("signOut");
-    },
-  },
+    }
+  }
 };
 </script>
 

@@ -26,9 +26,9 @@ export default {
     return {
       form: {
         title: "",
-        content: "",
+        content: ""
       },
-      isLoading: false,
+      isLoading: false
     };
   },
   methods: {
@@ -40,7 +40,7 @@ export default {
             `/posts/${this.$route.params.id}`,
             {
               title: this.form.title,
-              content: this.form.content,
+              content: this.form.content
             },
             { headers: { Authorization: this.$store.state.jwtToken } }
           )
@@ -48,7 +48,7 @@ export default {
             this.$buefy.toast.open({
               message: "Post was edited",
               position: "is-bottom",
-              type: "is-success",
+              type: "is-success"
             });
             this.$router.push("/");
           })
@@ -56,33 +56,33 @@ export default {
             this.$buefy.toast.open({
               message: `Something went wrong`,
               position: "is-bottom",
-              type: "is-danger",
+              type: "is-danger"
             });
           })
           .finally(() => {
             this.isLoading = false;
           });
       }
-    },
+    }
   },
   mounted() {
     this.isLoading = true;
     axios
       .get(`/posts/${this.$route.params.id}`)
-      .then((response) => {
+      .then(response => {
         this.form = response.data;
       })
       .catch(() => {
         this.$buefy.toast.open({
           message: `Something went wrong`,
           position: "is-bottom",
-          type: "is-danger",
+          type: "is-danger"
         });
       })
       .finally(() => {
         this.isLoading = false;
       });
-  },
+  }
 };
 </script>
 

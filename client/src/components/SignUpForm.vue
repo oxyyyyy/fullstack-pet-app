@@ -59,9 +59,9 @@ export default {
       signUpForm: {
         email: "",
         password: "",
-        name: "",
+        name: ""
       },
-      isLoading: false,
+      isLoading: false
     };
   },
   methods: {
@@ -76,27 +76,27 @@ export default {
           .post("/auth/signup", {
             email: this.signUpForm.email,
             password: this.signUpForm.password,
-            name: this.signUpForm.name,
+            name: this.signUpForm.name
           })
           .then(() => {
             this.$parent.close();
             this.$buefy.toast.open({
               message: "Sign Up success",
               position: "is-bottom",
-              type: "is-success",
+              type: "is-success"
             });
             for (let field in this.signUpForm) {
               this.signUpForm[field] = "";
             }
           })
-          .catch((error) => {
+          .catch(error => {
             if (error.response) {
               if (error.response.status === 422) {
-                error.response.data.data.forEach((data) => {
+                error.response.data.data.forEach(data => {
                   this.$buefy.toast.open({
                     message: data.msg,
                     position: "is-bottom",
-                    type: "is-danger",
+                    type: "is-danger"
                   });
                 });
                 return;
@@ -105,7 +105,7 @@ export default {
             this.$buefy.toast.open({
               message: `Something went wrong`,
               position: "is-bottom",
-              type: "is-danger",
+              type: "is-danger"
             });
             console.error(new Error(error));
           })
@@ -117,11 +117,11 @@ export default {
           duration: 5000,
           message: `Please fill the form`,
           position: "is-bottom",
-          type: "is-danger",
+          type: "is-danger"
         });
       }
-    },
-  },
+    }
+  }
 };
 </script>
 

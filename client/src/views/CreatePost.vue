@@ -28,9 +28,9 @@ export default {
     return {
       form: {
         title: "",
-        content: "",
+        content: ""
       },
-      isLoading: false,
+      isLoading: false
     };
   },
   methods: {
@@ -42,7 +42,7 @@ export default {
             "/posts",
             {
               title: this.form.title,
-              content: this.form.content,
+              content: this.form.content
             },
             { headers: { Authorization: this.$store.state.jwtToken } }
           )
@@ -50,17 +50,17 @@ export default {
             this.$buefy.toast.open({
               message: "Post was created",
               position: "is-bottom",
-              type: "is-success",
+              type: "is-success"
             });
             this.$router.push("/");
           })
-          .catch((error) => {
+          .catch(error => {
             if (error.response) {
               if (error.response.status === 422) {
                 this.$buefy.toast.open({
                   message: `Please fill the form correctly`,
                   position: "is-bottom",
-                  type: "is-danger",
+                  type: "is-danger"
                 });
                 return;
               }
@@ -68,7 +68,7 @@ export default {
             this.$buefy.toast.open({
               message: `Something went wrong`,
               position: "is-bottom",
-              type: "is-danger",
+              type: "is-danger"
             });
           })
           .finally(() => {
@@ -79,11 +79,11 @@ export default {
           duration: 5000,
           message: `Please fill the form`,
           position: "is-bottom",
-          type: "is-danger",
+          type: "is-danger"
         });
       }
-    },
-  },
+    }
+  }
 };
 </script>
 

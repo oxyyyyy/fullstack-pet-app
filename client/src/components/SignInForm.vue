@@ -48,9 +48,9 @@ export default {
     return {
       signInForm: {
         email: "",
-        password: "",
+        password: ""
       },
-      isLoading: false,
+      isLoading: false
     };
   },
   methods: {
@@ -60,14 +60,14 @@ export default {
         axios
           .post("/auth/signin", {
             email: this.signInForm.email,
-            password: this.signInForm.password,
+            password: this.signInForm.password
           })
-          .then((response) => {
+          .then(response => {
             if (response.status === 200) {
               this.$buefy.toast.open({
                 message: "Sign In success",
                 position: "is-bottom",
-                type: "is-success",
+                type: "is-success"
               });
               for (let field in this.signInForm) {
                 this.signInForm[field] = "";
@@ -76,18 +76,18 @@ export default {
                 token: response.data.token,
                 userID: response.data.id,
                 jwtToken: response.data.token,
-                username: response.data.username,
+                username: response.data.username
               });
               this.$parent.close();
             }
           })
-          .catch((error) => {
+          .catch(error => {
             if (error.response) {
               if (error.response.status === 401) {
                 this.$buefy.toast.open({
                   message: "Wrong credentials",
                   position: "is-bottom",
-                  type: "is-danger",
+                  type: "is-danger"
                 });
                 return;
               }
@@ -95,7 +95,7 @@ export default {
             this.$buefy.toast.open({
               message: `Something went wrong`,
               position: "is-bottom",
-              type: "is-danger",
+              type: "is-danger"
             });
             console.error(new Error(error));
           })
@@ -107,11 +107,11 @@ export default {
           duration: 5000,
           message: `Please fill the form`,
           position: "is-bottom",
-          type: "is-danger",
+          type: "is-danger"
         });
       }
-    },
-  },
+    }
+  }
 };
 </script>
 

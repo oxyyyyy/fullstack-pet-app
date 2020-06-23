@@ -45,30 +45,30 @@ export default {
   data() {
     return {
       posts: [],
-      preloaderIsActive: true,
+      preloaderIsActive: true
     };
   },
   components: {
-    PostCard,
+    PostCard
   },
   mounted() {
     axios
       .get("/posts")
-      .then((response) => {
+      .then(response => {
         this.posts = response.data;
       })
-      .catch((err) => {
+      .catch(err => {
         this.$buefy.toast.open({
           message: `Something went wrong`,
           position: "is-bottom",
-          type: "is-danger",
+          type: "is-danger"
         });
         console.error(err);
       })
       .finally(() => {
         this.preloaderIsActive = false;
       });
-  },
+  }
 };
 </script>
 

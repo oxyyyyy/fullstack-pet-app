@@ -11,7 +11,7 @@ export default new Vuex.Store({
     jwtToken: localStorage.getItem("jwt_token")
       ? "Bearer " + localStorage.getItem("jwt_token")
       : "",
-    username: localStorage.getItem("username"),
+    username: localStorage.getItem("username")
   },
   mutations: {
     signIn(state, payload) {
@@ -24,7 +24,7 @@ export default new Vuex.Store({
       state.isSignedIn = false;
       state.userID = "";
       state.username = "";
-    },
+    }
   },
   actions: {
     signIn(context, payload) {
@@ -40,7 +40,7 @@ export default new Vuex.Store({
       localStorage.removeItem("username");
       context.commit("signOut");
       router.go();
-    },
+    }
   },
-  modules: {},
+  modules: {}
 });

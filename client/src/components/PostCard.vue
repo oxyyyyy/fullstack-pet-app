@@ -21,31 +21,31 @@ export default {
   props: {
     id: {
       type: String,
-      required: true,
+      required: true
     },
     title: {
       type: String,
-      required: true,
+      required: true
     },
     content: {
       type: String,
-      required: true,
+      required: true
     },
     author: {
       type: String,
-      required: true,
+      required: true
     },
     timestamp: {
       type: Date,
-      required: true,
-    },
+      required: true
+    }
   },
   filters: {
     truncate(input) {
       if (input.length > 250) return input.substring(0, 300) + "...";
       else return input;
-    },
-  },
+    }
+  }
 };
 </script>
 

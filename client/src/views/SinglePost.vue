@@ -42,10 +42,10 @@ export default {
   data() {
     return {
       post: {
-        author: "",
+        author: ""
       },
       isAuthor: false,
-      isLoading: false,
+      isLoading: false
     };
   },
   methods: {
@@ -53,13 +53,13 @@ export default {
       this.isLoading = true;
       axios
         .delete(`/posts/${this.$route.params.id}`, {
-          headers: { Authorization: this.$store.state.jwtToken },
+          headers: { Authorization: this.$store.state.jwtToken }
         })
         .then(() => {
           this.$buefy.toast.open({
             message: "Post was deleted",
             position: "is-bottom",
-            type: "is-success",
+            type: "is-success"
           });
           this.$router.push("/");
         })
@@ -67,19 +67,19 @@ export default {
           this.$buefy.toast.open({
             message: `Something went wrong`,
             position: "is-bottom",
-            type: "is-danger",
+            type: "is-danger"
           });
         })
         .finally(() => {
           this.isLoading = false;
         });
-    },
+    }
   },
   mounted() {
     this.isLoading = true;
     axios
       .get(`/posts/${this.$route.params.id}`)
-      .then((response) => {
+      .then(response => {
         this.post = response.data;
         this.post.timestamp = new Date(this.post.createdAt);
         this.post.timestamp = `${this.post.timestamp.getDate()}/${this.post.timestamp.getMonth()}/${this.post.timestamp.getFullYear()} at ${this.post.timestamp.getHours()}:${this.post.timestamp.getMinutes()}`;
@@ -90,13 +90,13 @@ export default {
         this.$buefy.toast.open({
           message: `Something went wrong`,
           position: "is-bottom",
-          type: "is-danger",
+          type: "is-danger"
         });
       })
       .finally(() => {
         this.isLoading = false;
       });
-  },
+  }
 };
 </script>
 

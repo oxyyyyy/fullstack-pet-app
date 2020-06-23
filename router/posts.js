@@ -16,6 +16,9 @@ router.post(
   postsController.createPost
 );
 
+// * GET /my-posts
+router.get("/my-posts", authMiddleware, postsController.getMyPosts);
+
 // * GET /posts/:id
 router.get("/:postID", postsController.getPost);
 

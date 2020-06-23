@@ -13,6 +13,13 @@
         <b-navbar-item tag="router-link" to="/">
           Home
         </b-navbar-item>
+        <b-navbar-item
+          tag="router-link"
+          to="/my-posts"
+          v-if="$store.state.isSignedIn"
+        >
+          My posts
+        </b-navbar-item>
       </template>
 
       <template slot="end">
@@ -96,5 +103,10 @@ export default {
 <style lang="scss">
 .navbar__nickname {
   margin-right: 1rem;
+
+  @media screen and (max-width: 1024px) {
+    margin-right: 0;
+    margin-bottom: 1rem;
+  }
 }
 </style>

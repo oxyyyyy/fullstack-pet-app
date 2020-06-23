@@ -2,7 +2,7 @@
   <div class="page">
     <section class="posts">
       <header class="posts__header">
-        <h1 class="posts__header-title title">Posts:</h1>
+        <h1 class="title">My Posts:</h1>
         <div class="posts__controls">
           <b-select
             class="posts__sort-select"
@@ -18,15 +18,6 @@
               {{ option.label }}
             </option>
           </b-select>
-          <b-button
-            v-if="$store.state.isSignedIn"
-            tag="router-link"
-            to="/create-post"
-            type="is-link"
-            class="create-post__btn"
-          >
-            <strong>Create Post</strong>
-          </b-button>
         </div>
       </header>
       <PostCard
@@ -57,7 +48,7 @@ import axios from "axios";
 import PostCard from "@/components/PostCard.vue";
 
 export default {
-  name: "Home",
+  name: "MyPosts",
   data() {
     return {
       posts: [],
@@ -81,7 +72,9 @@ export default {
   methods: {
     sortByChange() {
       axios
-        .get(`/posts?sortBy=${this.selectedSortBy}`)
+        .get(`/posts/my-posts?sortBy=${this.selectedSortBy}`, {
+          headers: { Authorization: this.$store.state.jwtToken }
+        })
         .then(response => {
           this.posts = response.data;
         })
@@ -100,7 +93,9 @@ export default {
   },
   mounted() {
     axios
-      .get("/posts")
+      .get("/posts/my-posts", {
+        headers: { Authorization: this.$store.state.jwtToken }
+      })
       .then(response => {
         this.posts = response.data;
       })
@@ -120,11 +115,7 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-.posts__controls {
-  display: flex;
-}
-
-.create-post__btn {
-  margin-left: 1rem;
+.my-posts {
+  padding-top: 3rem;
 }
 </style>

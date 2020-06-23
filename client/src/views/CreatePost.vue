@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div class="page">
     <form @submit.prevent="submitForm">
       <b-field label="Title">
         <b-input v-model="form.title" required></b-input>

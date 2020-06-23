@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div class="page">
     <article class="post">
       <h2 class="postCard__title title">{{ post.title }}</h2>
       <p class="postCard__content">{{ post.content }}</p>

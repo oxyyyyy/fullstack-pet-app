@@ -5,6 +5,7 @@ import Home from "../views/Home.vue";
 import SinglePost from "../views/SinglePost.vue";
 import CreatePost from "../views/CreatePost.vue";
 import EditPost from "../views/EditPost.vue";
+import MyPosts from "../views/MyPosts.vue";
 
 import store from "@/store";
 
@@ -30,6 +31,11 @@ const routes = [
     path: "/edit-post/:id",
     name: "EditPost",
     component: EditPost
+  },
+  {
+    path: "/my-posts",
+    name: "MyPosts",
+    component: MyPosts
   }
 ];
 
@@ -43,6 +49,7 @@ router.beforeEach((to, from, next) => {
   if (to.name === "CreatePost" && !store.state.isSignedIn)
     next({ name: "Home" });
   if (to.name === "EditPost" && !store.state.isSignedIn) next({ name: "Home" });
+  if (to.name === "MyPosts" && !store.state.isSignedIn) next({ name: "Home" });
   else next();
 });
 

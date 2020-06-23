@@ -4,9 +4,24 @@ const User = require("../models/user");
 const { validationResult } = require("express-validator");
 
 exports.getAllPosts = async (req, res, next) => {
+  const sortBy = req.query.sortBy;
   try {
     const posts = await Post.find()
-      .sort({ updatedAt: "desc" })
+      .sort({ updatedAt: sortBy || "desc" })
+      .populate("author", "name");
+
+    res.json(posts);
+  } catch (err) {
+    next(err);
+  }
+};
+
+exports.getMyPosts = async (req, res, next) => {
+  const userID = req.userID;
+  const sortBy = req.query.sortBy;
+  try {
+    const posts = await Post.find({ author: userID })
+      .sort({ updatedAt: sortBy || "desc" })
       .populate("author", "name");
 
     res.json(posts);

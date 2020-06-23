@@ -43,5 +43,5 @@ app.use((error, req, res, next) => {
 db.on("error", console.error.bind(console, "connection error:"));
 db.once("open", function () {
   console.log("Database connection success");
-  app.listen(8081);
+  app.listen(process.env.PORT || 8081);
 });

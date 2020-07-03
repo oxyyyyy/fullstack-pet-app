@@ -2,10 +2,6 @@ import Vue from "vue";
 import VueRouter from "vue-router";
 
 import Home from "../views/Home.vue";
-import SinglePost from "../views/SinglePost.vue";
-import CreatePost from "../views/CreatePost.vue";
-import EditPost from "../views/EditPost.vue";
-import MyPosts from "../views/MyPosts.vue";
 
 import store from "@/store";
 
@@ -20,22 +16,27 @@ const routes = [
   {
     path: "/posts/:id",
     name: "SinglePost",
-    component: SinglePost
+    component: () => import(`@/views/SinglePost.vue`)
   },
   {
     path: "/create-post",
     name: "CreatePost",
-    component: CreatePost
+    component: () => import(`@/views/CreatePost.vue`)
   },
   {
     path: "/edit-post/:id",
     name: "EditPost",
-    component: EditPost
+    component: () => import(`@/views/EditPost.vue`)
   },
   {
     path: "/my-posts",
     name: "MyPosts",
-    component: MyPosts
+    component: () => import(`@/views/MyPosts.vue`)
+  },
+  {
+    path: "/profile/:id",
+    name: "Profile",
+    component: () => import(`@/views/Profile.vue`)
   }
 ];
 

@@ -3,9 +3,12 @@ const express = require("express");
 const mongoose = require("mongoose");
 const bodyParser = require("body-parser");
 const morgan = require("morgan");
+const multer = require("multer");
+const path = require("path");
 
 const postsRouter = require("./router/posts");
 const authRouter = require("./router/auth");
+const profileRouter = require("./router/profile");
 
 const app = express();
 
@@ -15,6 +18,8 @@ const isProduction = process.env.NODE_ENV === "production";
 
 app.use(morgan("tiny"));
 app.use(bodyParser.json());
+
+app.use(express.static(__dirname + "/public"));
 
 // * Database connection
 
@@ -39,10 +44,41 @@ app.use((req, res, next) => {
   next();
 });
 
+// * File uploading
+
+const storageConfig = multer.diskStorage({
+  destination: (req, file, cb) => {
+    cb(null, __dirname + "/public/images/");
+  },
+  filename: (req, file, cb) => {
+    cb(null, Date.now() + path.extname(file.originalname));
+  },
+});
+
+const fileFilterConfig = (req, file, cb) => {
+  const filetypes = /jpeg|jpg|png|gif/;
+  const mimetype = filetypes.test(file.mimetype);
+  const extname = filetypes.test(path.extname(file.originalname).toLowerCase());
+
+  if (mimetype && extname) {
+    return cb(null, true);
+  }
+
+  cb("Error: File upload only supports the following filetypes - " + filetypes);
+};
+
+app.use(
+  multer({
+    storage: storageConfig,
+    fileFilter: fileFilterConfig,
+  }).single("filedata")
+);
+
 // * Router
 
 app.use("/posts", postsRouter);
 app.use("/auth", authRouter);
+app.use("/profile", profileRouter);
 
 // * Error handlers
 

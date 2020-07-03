@@ -24,7 +24,11 @@
 
       <template slot="end">
         <b-navbar-item tag="div">
-          <p class="navbar__nickname">{{ $store.state.username }}</p>
+          <router-link
+            :to="'profile/' + $store.state.userID"
+            class="navbar__nickname"
+            >{{ $store.state.username }}</router-link
+          >
           <div class="buttons">
             <button
               class="button is-primary"
@@ -38,14 +42,14 @@
               v-if="$store.state.isSignedIn === false"
               @click="isSignInModalActive = true"
             >
-              Log in
+              Sign in
             </button>
             <button
               class="button is-light"
               v-if="$store.state.isSignedIn === true"
               @click="signOut"
             >
-              Log out
+              Sign out
             </button>
           </div>
         </b-navbar-item>

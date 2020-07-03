@@ -24,6 +24,9 @@ export default new Vuex.Store({
       state.isSignedIn = false;
       state.userID = "";
       state.username = "";
+    },
+    changeUsername(state, payload) {
+      state.username = payload.username;
     }
   },
   actions: {
@@ -40,6 +43,10 @@ export default new Vuex.Store({
       localStorage.removeItem("username");
       context.commit("signOut");
       router.go();
+    },
+    profileUpdate(context, payload) {
+      localStorage.setItem("username", payload.username);
+      context.commit("changeUsername", payload);
     }
   },
   modules: {}

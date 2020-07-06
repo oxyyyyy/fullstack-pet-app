@@ -19,7 +19,7 @@
             </option>
           </b-select>
           <b-button
-            v-if="$store.state.isSignedIn"
+            v-if="isSignedIn"
             tag="router-link"
             to="/create-post"
             type="is-link"
@@ -53,6 +53,7 @@
 
 <script>
 import axios from "axios";
+import { mapGetters } from "vuex";
 
 import PostCard from "@/components/PostCard.vue";
 
@@ -74,6 +75,9 @@ export default {
         }
       ]
     };
+  },
+  computed: {
+    ...mapGetters(["isSignedIn"])
   },
   components: {
     PostCard

@@ -31,6 +31,7 @@
 
 <script>
 import axios from "axios";
+import { mapGetters } from "vuex";
 
 export default {
   name: "Profile",
@@ -44,6 +45,9 @@ export default {
       },
       isLoading: false
     };
+  },
+  computed: {
+    ...mapGetters(["jwtToken"])
   },
   mounted() {
     this.isLoading = true;
@@ -79,7 +83,7 @@ export default {
         .put(`/profile/${this.$route.params.id}`, formData, {
           headers: {
             "Content-Type": "multipart/form-data",
-            Authorization: this.$store.state.jwtToken
+            Authorization: this.jwtToken
           }
         })
         .then(() => {
@@ -91,7 +95,7 @@ export default {
             position: "is-bottom",
             type: "is-success"
           });
-          this.$router.go();
+          // this.$router.go();
         })
         .catch(() => {
           this.$buefy.toast.open({

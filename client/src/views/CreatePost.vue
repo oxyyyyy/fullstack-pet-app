@@ -21,6 +21,7 @@
 
 <script>
 import axios from "axios";
+import { mapGetters } from "vuex";
 
 export default {
   name: "CreatePost",
@@ -33,6 +34,9 @@ export default {
       isLoading: false
     };
   },
+  computed: {
+    ...mapGetters(["jwtToken"])
+  },
   methods: {
     submitForm() {
       if (this.form.title && this.form.content) {
@@ -44,7 +48,7 @@ export default {
               title: this.form.title,
               content: this.form.content
             },
-            { headers: { Authorization: this.$store.state.jwtToken } }
+            { headers: { Authorization: this.jwtToken } }
           )
           .then(() => {
             this.$buefy.toast.open({

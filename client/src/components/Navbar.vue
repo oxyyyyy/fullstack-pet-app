@@ -13,40 +13,34 @@
         <b-navbar-item tag="router-link" to="/">
           Home
         </b-navbar-item>
-        <b-navbar-item
-          tag="router-link"
-          to="/my-posts"
-          v-if="$store.state.isSignedIn"
-        >
+        <b-navbar-item tag="router-link" to="/my-posts" v-if="isSignedIn">
           My posts
         </b-navbar-item>
       </template>
 
       <template slot="end">
         <b-navbar-item tag="div">
-          <router-link
-            :to="'profile/' + $store.state.userID"
-            class="navbar__nickname"
-            >{{ $store.state.username }}</router-link
-          >
+          <router-link :to="'profile/' + userID" class="navbar__nickname">{{
+            username
+          }}</router-link>
           <div class="buttons">
             <button
               class="button is-primary"
-              v-if="$store.state.isSignedIn === false"
+              v-if="isSignedIn === false"
               @click="isSignUpModalActive = true"
             >
               <strong>Sign up</strong>
             </button>
             <button
               class="button is-light"
-              v-if="$store.state.isSignedIn === false"
+              v-if="isSignedIn === false"
               @click="isSignInModalActive = true"
             >
               Sign in
             </button>
             <button
               class="button is-light"
-              v-if="$store.state.isSignedIn === true"
+              v-if="isSignedIn === true"
               @click="signOut"
             >
               Sign out
@@ -80,6 +74,8 @@
 </template>
 
 <script>
+import { mapGetters } from "vuex";
+
 import SignUpForm from "@/components/SignUpForm";
 import SignInForm from "@/components/SignInForm";
 
@@ -95,9 +91,11 @@ export default {
       isLoading: false
     };
   },
+  computed: {
+    ...mapGetters(["isSignedIn", "userID", "username"])
+  },
   methods: {
     signOut() {
-      this.isLoading = true;
       this.$store.dispatch("signOut");
     }
   }

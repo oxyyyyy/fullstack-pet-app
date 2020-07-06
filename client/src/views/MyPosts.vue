@@ -44,6 +44,7 @@
 
 <script>
 import axios from "axios";
+import { mapGetters } from "vuex";
 
 import PostCard from "@/components/PostCard.vue";
 
@@ -66,6 +67,9 @@ export default {
       ]
     };
   },
+  computed: {
+    ...mapGetters(["jwtToken"])
+  },
   components: {
     PostCard
   },
@@ -73,7 +77,7 @@ export default {
     sortByChange() {
       axios
         .get(`/posts/my-posts?sortBy=${this.selectedSortBy}`, {
-          headers: { Authorization: this.$store.state.jwtToken }
+          headers: { Authorization: this.jwtToken }
         })
         .then(response => {
           this.posts = response.data;
@@ -94,7 +98,7 @@ export default {
   mounted() {
     axios
       .get("/posts/my-posts", {
-        headers: { Authorization: this.$store.state.jwtToken }
+        headers: { Authorization: this.jwtToken }
       })
       .then(response => {
         this.posts = response.data;

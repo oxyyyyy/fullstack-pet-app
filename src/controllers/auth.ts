@@ -1,20 +1,28 @@
-const { validationResult } = require("express-validator");
-const jwt = require("jsonwebtoken");
-const bcrypt = require("bcrypt");
+import { validationResult } from "express-validator";
+import jwt from "jsonwebtoken";
+import bcrypt from "bcrypt";
 
-const User = require("../models/user");
+import User from "../models/user";
+
+import { Request, Response, NextFunction } from "express";
+
+import { BetterError } from "../types/types";
 
 const saltRounds = 10;
 const jwtExpiresIn = "1h";
 
-exports.signup = async (req, res, next) => {
+export const signup = async (
+  req: Request,
+  res: Response,
+  next: NextFunction
+) => {
   const email = req.body.email;
   const password = req.body.password;
   const name = req.body.name;
 
   const errors = validationResult(req);
   if (!errors.isEmpty()) {
-    const error = new Error("Validation failed");
+    const error: BetterError = new Error("Validation failed");
     error.statusCode = 422;
     error.data = errors.array();
     throw error;
@@ -36,28 +44,32 @@ exports.signup = async (req, res, next) => {
   }
 };
 
-exports.signin = async (req, res, next) => {
+export const signin = async (
+  req: Request,
+  res: Response,
+  next: NextFunction
+) => {
   const email = req.body.email;
   const password = req.body.password;
 
   try {
     const user = await User.findOne({ email });
     if (!user) {
-      const error = new Error("Wrong email");
+      const error: BetterError = new Error("Wrong email");
       error.statusCode = 401;
       throw error;
     }
 
     const isEqual = await bcrypt.compare(password, user.password);
     if (!isEqual) {
-      const error = new Error("Wrong password");
+      const error: BetterError = new Error("Wrong password");
       error.statusCode = 401;
       throw error;
     }
 
     const token = jwt.sign(
       { id: user._id.toString() },
-      process.env.JWT_SECRET,
+      process.env.JWT_SECRET!,
       { expiresIn: jwtExpiresIn }
     );
 

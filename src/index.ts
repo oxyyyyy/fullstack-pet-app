@@ -1,14 +1,21 @@
-const dotenv = require("dotenv").config();
-const express = require("express");
-const mongoose = require("mongoose");
-const bodyParser = require("body-parser");
-const morgan = require("morgan");
-const multer = require("multer");
-const path = require("path");
+import dotenv from "dotenv";
+import express from "express";
+import mongoose from "mongoose";
+import bodyParser from "body-parser";
+import morgan from "morgan";
+import multer from "multer";
+import path from "path";
+import { AddressInfo } from "net";
 
-const postsRouter = require("./router/posts");
-const authRouter = require("./router/auth");
-const profileRouter = require("./router/profile");
+import { Request, Response, NextFunction } from "express";
+
+import { BetterError } from "./types/types";
+
+import postsRouter from "./router/posts";
+import authRouter from "./router/auth";
+import profileRouter from "./router/profile";
+
+dotenv.config();
 
 const app = express();
 
@@ -34,7 +41,7 @@ if (!isProduction) {
 
 // * Headers config
 
-app.use((req, res, next) => {
+app.use((req: Request, res: Response, next: NextFunction) => {
   res.setHeader("Access-Control-Allow-Origin", "*");
   res.setHeader(
     "Access-Control-Allow-Methods",
@@ -55,22 +62,27 @@ const storageConfig = multer.diskStorage({
   },
 });
 
-const fileFilterConfig = (req, file, cb) => {
-  const filetypes = /jpeg|jpg|png|gif/;
-  const mimetype = filetypes.test(file.mimetype);
-  const extname = filetypes.test(path.extname(file.originalname).toLowerCase());
-
-  if (mimetype && extname) {
-    return cb(null, true);
-  }
-
-  cb("Error: File upload only supports the following filetypes - " + filetypes);
-};
-
 app.use(
   multer({
     storage: storageConfig,
-    fileFilter: fileFilterConfig,
+    fileFilter: (req, file, cb) => {
+      const filetypes = /jpeg|jpg|png|gif/;
+      const mimetype = filetypes.test(file.mimetype);
+      const extname = filetypes.test(
+        path.extname(file.originalname).toLowerCase()
+      );
+
+      if (mimetype && extname) {
+        return cb(null, true);
+      }
+
+      cb(
+        new Error(
+          "Error: File upload only supports the following filetypes - " +
+            filetypes
+        )
+      );
+    },
   }).single("filedata")
 );
 
@@ -83,16 +95,16 @@ app.use("/profile", profileRouter);
 // * Error handlers
 
 // catch 404 and forward to error handler
-app.use((req, res, next) => {
-  const err = new Error("Not Found");
-  err.status = 404;
+app.use((req: Request, res: Response, next: NextFunction) => {
+  const err: BetterError = new Error("Not Found");
+  err.statusCode = 404;
   next(err);
 });
 
 // development error handler
 // will print stacktrace
 if (!isProduction) {
-  app.use((err, req, res, next) => {
+  app.use((err: any, req: Request, res: Response, next: NextFunction) => {
     console.log(err.stack);
 
     res.status(err.status || 500);
@@ -108,7 +120,7 @@ if (!isProduction) {
 
 // production error handler
 // no stacktraces leaked to user
-app.use((err, req, res, next) => {
+app.use((err: any, req: Request, res: Response, next: NextFunction) => {
   res.status(err.status || 500);
   res.json({
     errors: {
@@ -124,6 +136,7 @@ db.on("error", console.error.bind(console, "connection error:"));
 db.once("open", function () {
   console.log("Database connection success");
   const server = app.listen(process.env.PORT || 8081, function () {
-    console.log("Listening on port " + server.address().port);
+    const { port } = server.address() as AddressInfo;
+    console.log("Listening on port " + port);
   });
 });

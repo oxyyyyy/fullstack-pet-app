@@ -1,9 +1,17 @@
-const Post = require("../models/post");
-const User = require("../models/user");
+import Post from "../models/post";
+import User from "../models/user";
 
-const { validationResult } = require("express-validator");
+import { Request, Response, NextFunction } from "express";
 
-exports.getAllPosts = async (req, res, next) => {
+import { req, BetterError } from "../types/types";
+
+import { validationResult } from "express-validator";
+
+export const getAllPosts = async (
+  req: Request,
+  res: Response,
+  next: NextFunction
+) => {
   const sortBy = req.query.sortBy;
   try {
     const posts = await Post.find()
@@ -16,7 +24,11 @@ exports.getAllPosts = async (req, res, next) => {
   }
 };
 
-exports.getMyPosts = async (req, res, next) => {
+export const getMyPosts = async (
+  req: req,
+  res: Response,
+  next: NextFunction
+) => {
   const userID = req.userID;
   const sortBy = req.query.sortBy;
   try {
@@ -30,14 +42,18 @@ exports.getMyPosts = async (req, res, next) => {
   }
 };
 
-exports.getPost = async (req, res, next) => {
+export const getPost = async (
+  req: Request,
+  res: Response,
+  next: NextFunction
+) => {
   const id = req.params.postID;
 
   try {
     const post = await Post.findById(id).populate("author", "name");
 
     if (!post) {
-      const error = new Error("Could not find post.");
+      const error: BetterError = new Error("Could not find post.");
       error.statusCode = 404;
       throw error;
     }
@@ -48,7 +64,11 @@ exports.getPost = async (req, res, next) => {
   }
 };
 
-exports.createPost = async (req, res, next) => {
+export const createPost = async (
+  req: req,
+  res: Response,
+  next: NextFunction
+) => {
   const title = req.body.title;
   const content = req.body.content;
   const post = new Post({
@@ -65,6 +85,13 @@ exports.createPost = async (req, res, next) => {
   try {
     const savedPost = await post.save();
     const user = await User.findById(req.userID);
+
+    if (!user) {
+      const error: BetterError = new Error("Could not find user.");
+      error.statusCode = 404;
+      throw error;
+    }
+
     user.posts.push(post);
     user.save();
     res.status(201).json({
@@ -76,7 +103,11 @@ exports.createPost = async (req, res, next) => {
   }
 };
 
-exports.editPost = async (req, res, next) => {
+export const editPost = async (
+  req: Request,
+  res: Response,
+  next: NextFunction
+) => {
   const id = req.params.postID;
   const title = req.body.title;
   const content = req.body.content;
@@ -90,7 +121,7 @@ exports.editPost = async (req, res, next) => {
     const post = await Post.findByIdAndUpdate(id, { title, content });
 
     if (!post) {
-      const error = new Error("Could not find post.");
+      const error: BetterError = new Error("Could not find post.");
       error.statusCode = 404;
       throw error;
     }
@@ -103,14 +134,18 @@ exports.editPost = async (req, res, next) => {
   }
 };
 
-exports.deletePost = async (req, res, next) => {
+export const deletePost = async (
+  req: Request,
+  res: Response,
+  next: NextFunction
+) => {
   const id = req.params.postID;
 
   try {
     const post = await Post.findByIdAndDelete(id);
 
     if (!post) {
-      const error = new Error("Could not find post.");
+      const error: BetterError = new Error("Could not find post.");
       error.statusCode = 404;
       throw error;
     }

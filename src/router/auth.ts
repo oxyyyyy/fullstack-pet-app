@@ -1,9 +1,11 @@
-const router = require("express").Router();
-const { check } = require("express-validator");
+import { Router } from "express";
+import { check } from "express-validator";
 
-const User = require("../models/user");
+import User from "../models/user";
 
-const authController = require("../controllers/auth");
+import { signup, signin } from "../controllers/auth";
+
+const router = Router();
 
 // * POST /auth/signup
 router.post(
@@ -21,10 +23,10 @@ router.post(
     check("password").trim().isLength({ min: 6 }),
     check("name").trim().notEmpty(),
   ],
-  authController.signup
+  signup
 );
 
 // * POST /auth/signin
-router.post("/signin", authController.signin);
+router.post("/signin", signin);
 
-module.exports = router;
+export default router;

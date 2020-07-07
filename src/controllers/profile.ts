@@ -1,13 +1,20 @@
-const User = require("../models/user");
+import User from "../models/user";
 
-exports.getProfile = async (req, res, next) => {
+import { Request, Response, NextFunction } from "express";
+import { BetterError } from "../types/types";
+
+export const getProfile = async (
+  req: Request,
+  res: Response,
+  next: NextFunction
+) => {
   const id = req.params.id;
 
   try {
     const user = await User.findById(id);
 
     if (!user) {
-      const error = new Error("Could not find user.");
+      const error: BetterError = new Error("Could not find user.");
       error.statusCode = 404;
       throw error;
     }
@@ -18,7 +25,11 @@ exports.getProfile = async (req, res, next) => {
   }
 };
 
-exports.editProfile = async (req, res, next) => {
+export const editProfile = async (
+  req: Request,
+  res: Response,
+  next: NextFunction
+) => {
   const id = req.params.id;
   const name = req.body.username;
   const email = req.body.email;
@@ -41,7 +52,7 @@ exports.editProfile = async (req, res, next) => {
     }
 
     if (!user) {
-      const error = new Error("Could not find user.");
+      const error: BetterError = new Error("Could not find user.");
       error.statusCode = 404;
       throw error;
     }

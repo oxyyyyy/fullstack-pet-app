@@ -77,7 +77,6 @@ export default {
       if (this.user.avatar) {
         formData.append("filedata", this.user.avatar);
       }
-      console.log(formData);
       this.isLoading = true;
       axios
         .put(`/profile/${this.$route.params.id}`, formData, {
@@ -95,7 +94,6 @@ export default {
             position: "is-bottom",
             type: "is-success"
           });
-          // this.$router.go();
         })
         .catch(() => {
           this.$buefy.toast.open({

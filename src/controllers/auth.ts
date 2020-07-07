@@ -9,7 +9,7 @@ import { Request, Response, NextFunction } from "express";
 import { BetterError } from "../types/types";
 
 const saltRounds = 10;
-const jwtExpiresIn = "1h";
+const jwtExpiresIn = "72h";
 
 export const signup = async (
   req: Request,

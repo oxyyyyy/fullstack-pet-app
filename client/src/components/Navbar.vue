@@ -20,7 +20,7 @@
 
       <template slot="end">
         <b-navbar-item tag="div">
-          <router-link :to="'profile/' + userID" class="navbar__nickname">{{
+          <router-link :to="'/profile/' + userID" class="navbar__nickname">{{
             username
           }}</router-link>
           <div class="buttons">

@@ -1,6 +1,7 @@
 import { validationResult } from "express-validator";
 import jwt from "jsonwebtoken";
 import bcrypt from "bcrypt";
+import * as passport from "passport";
 
 import User from "../models/user";
 
@@ -9,7 +10,6 @@ import { Request, Response, NextFunction } from "express";
 import { BetterError } from "../types/types";
 
 const saltRounds = 10;
-const jwtExpiresIn = "72h";
 
 export const signup = async (
   req: Request,
@@ -49,41 +49,16 @@ export const signin = async (
   res: Response,
   next: NextFunction
 ) => {
-  const email = req.body.email;
-  const password = req.body.password;
-
-  try {
-    const user = await User.findOne({ email });
-    if (!user) {
-      const error: BetterError = new Error("Wrong email");
-      error.statusCode = 401;
-      throw error;
+  passport.authenticate("local", { session: false }, (err, user, info) => {
+    if (err) {
+      return next(err);
     }
 
-    const isEqual = await bcrypt.compare(password, user.password);
-    if (!isEqual) {
-      const error: BetterError = new Error("Wrong password");
-      error.statusCode = 401;
-      throw error;
+    if (user) {
+      user.token = user.generateJWT();
+      return res.json({ user });
+    } else {
+      return res.status(422).json(info);
     }
-
-    const token = jwt.sign(
-      { id: user._id.toString() },
-      process.env.JWT_SECRET!,
-      { expiresIn: jwtExpiresIn }
-    );
-
-    // const today = new Date();
-    // const jwtExpiresInDate = today.setHours(
-    //   today.getHours() + parseInt(jwtExpiresIn)
-    // );
-
-    res.json({
-      token,
-      id: user._id.toString(),
-      username: user.name,
-    });
-  } catch (err) {
-    next(err);
-  }
+  })(req, res, next);
 };

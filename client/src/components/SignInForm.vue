@@ -72,6 +72,7 @@ export default {
               for (let field in this.signInForm) {
                 this.signInForm[field] = "";
               }
+              console.log(response);
               this.$store.dispatch("signIn", {
                 token: response.data.token,
                 userID: response.data.id,

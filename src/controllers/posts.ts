@@ -29,7 +29,7 @@ export const getMyPosts = async (
   res: Response,
   next: NextFunction
 ) => {
-  const userID = req.userID;
+  const userID: any = req.userID;
   const sortBy = req.query.sortBy;
   try {
     const posts = await Post.find({ author: userID })
@@ -71,7 +71,7 @@ export const createPost = async (
 ) => {
   const title = req.body.title;
   const content = req.body.content;
-  const post = new Post({
+  const post: any = new Post({
     title,
     content,
     author: req.userID,

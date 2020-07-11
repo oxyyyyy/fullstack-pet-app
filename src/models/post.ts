@@ -1,5 +1,9 @@
 import mongoose, { Schema } from "mongoose";
 
+import { InterfacePost } from "../types/types";
+
+export interface InterfaceUserModel extends InterfacePost, Document {}
+
 const postSchema: Schema = new Schema(
   {
     title: {
@@ -19,4 +23,4 @@ const postSchema: Schema = new Schema(
   { timestamps: true }
 );
 
-export default mongoose.model("Post", postSchema);
+export default mongoose.model<InterfaceUserModel>("Post", postSchema);

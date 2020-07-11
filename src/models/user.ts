@@ -1,11 +1,12 @@
 import mongoose, { Schema, Document } from "mongoose";
+import bcrypt from "bcrypt";
+import jwt from "jsonwebtoken";
 
-export interface UserInterface extends Document {
-  email: string;
-  password: string;
-  name: string;
-  avatar: string;
-  posts: [{}];
+import { InterfaceUser } from "../types/types";
+
+export interface InterfaceUserModel extends InterfaceUser, Document {
+  generateJWT(): string;
+  passwordIsValid(password: string): boolean;
 }
 
 const userSchema: Schema = new Schema({
@@ -13,7 +14,7 @@ const userSchema: Schema = new Schema({
     type: String,
     required: true,
   },
-  password: {
+  hash: {
     type: String,
     required: true,
   },
@@ -34,4 +35,19 @@ const userSchema: Schema = new Schema({
   ],
 });
 
-export default mongoose.model<UserInterface>("User", userSchema);
+userSchema.methods.generateJWT = function (): string {
+  const jwtExpiresIn = "72h";
+  const today = new Date();
+  const exp = new Date(today);
+  exp.setDate(today.getDate() + 60);
+
+  return jwt.sign({ id: this._id.toString() }, process.env.JWT_SECRET!, {
+    expiresIn: jwtExpiresIn,
+  });
+};
+
+userSchema.methods.passwordIsValid = async function (password: string) {
+  return await bcrypt.compare(password, this.user.hash);
+};
+
+export default mongoose.model<InterfaceUserModel>("User", userSchema);
